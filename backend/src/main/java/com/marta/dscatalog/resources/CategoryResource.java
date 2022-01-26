@@ -1,6 +1,8 @@
 package com.marta.dscatalog.resources;
 
 import com.marta.dscatalog.entities.Category;
+import com.marta.dscatalog.resources.dto.CategoryDTO;
+import com.marta.dscatalog.resources.mapper.CategoryDTOMapper;
 import com.marta.dscatalog.services.CategoryService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -18,10 +20,12 @@ public class CategoryResource {
 
     private final CategoryService categoryService;
 
-    @GetMapping
-    public ResponseEntity<List<Category>> findAll() {
-        List<Category> categoryList = categoryService.findAll();
+    private  final CategoryDTOMapper categoryDTOMapper;
 
-        return ResponseEntity.ok().body(categoryList);
+    @GetMapping
+    public ResponseEntity<List<CategoryDTO>> findAll() {
+        List<Category> categoryList = categoryService.findAll();
+        List<CategoryDTO> categoryDTOList = categoryDTOMapper.mapCategoriesToCategoriesDTO(categoryList);
+        return ResponseEntity.ok().body(categoryDTOList);
     }
 }
