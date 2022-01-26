@@ -6,11 +6,11 @@ import com.marta.dscatalog.resources.mapper.CategoryDTOMapper;
 import com.marta.dscatalog.services.CategoryService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 
+import java.net.URI;
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -27,5 +27,22 @@ public class CategoryResource {
         List<Category> categoryList = categoryService.findAll();
         List<CategoryDTO> categoryDTOList = categoryDTOMapper.mapCategoriesToCategoriesDTO(categoryList);
         return ResponseEntity.ok().body(categoryDTOList);
+    }
+
+    @GetMapping(value = "/{id}")
+    public ResponseEntity<CategoryDTO> findById(@PathVariable Long id) {
+        Category category = categoryService.findById(id);
+        CategoryDTO categoryDTO = categoryDTOMapper.mapCategoryToCategoryDTO(category);
+        return ResponseEntity.ok().body(categoryDTO);
+    }
+
+    @PostMapping
+    public ResponseEntity<CategoryDTO> insert(@RequestBody CategoryDTO categoryDTO) {
+        Category category = categoryDTOMapper.mapCategoryDTOToCategory(categoryDTO);
+        categoryService.insert(category);
+
+        URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(category.getId()).toUri();
+
+        return ResponseEntity.created(uri).build();
     }
 }

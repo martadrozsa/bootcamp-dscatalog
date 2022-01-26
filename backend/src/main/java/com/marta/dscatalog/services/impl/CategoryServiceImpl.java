@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -19,5 +20,20 @@ public class CategoryServiceImpl  implements CategoryService {
     @Override
     public List<Category> findAll() {
         return categoryRepository.findAll();
+    }
+
+    @Transactional(readOnly = true)
+    @Override
+    public Category findById(Long id) {
+        Optional<Category> categoryOptional = categoryRepository.findById(id);
+
+        Category categoryEntity = categoryOptional.get();
+        return categoryEntity;
+    }
+
+    @Transactional
+    @Override
+    public Category insert(Category category) {
+        return categoryRepository.save(category);
     }
 }
