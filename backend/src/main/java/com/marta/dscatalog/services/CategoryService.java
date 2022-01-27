@@ -2,7 +2,6 @@ package com.marta.dscatalog.services;
 
 
 import com.marta.dscatalog.entities.Category;
-import com.marta.dscatalog.resources.dto.CategoryDTO;
 
 import java.util.List;
 
@@ -12,5 +11,7 @@ public interface CategoryService {
 
     Category findById(Long id);
 
-    Category insert(Category category);
+    void insert(Category category);
+
+    Category update(Long id, Category category);
 }

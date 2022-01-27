@@ -22,4 +22,6 @@ public class Category implements Serializable {
     private String name;
 
 
+    public String cpf;
+
 }
