@@ -3,8 +3,11 @@ package com.marta.dscatalog.services.impl;
 import com.marta.dscatalog.entities.Category;
 import com.marta.dscatalog.repositories.CategoryRepository;
 import com.marta.dscatalog.services.CategoryService;
+import com.marta.dscatalog.services.exceptions.DataBaseException;
 import com.marta.dscatalog.services.exceptions.ResourceNotFoundException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -48,6 +51,17 @@ public class CategoryServiceImpl  implements CategoryService {
             return categoryRepository.save(savedCategory);
         } catch (EntityNotFoundException e) {
             throw new ResourceNotFoundException("Id not found " + id);
+        } catch (DataIntegrityViolationException e) {
+            throw  new DataBaseException("Integrity violation");
+        }
+    }
+
+    @Override
+    public void deleteById(Long id) {
+        try{
+            categoryRepository.deleteById(id);
+        } catch (EmptyResultDataAccessException e) {
+            throw new ResourceNotFoundException("Id not found");
         }
     }
 }
