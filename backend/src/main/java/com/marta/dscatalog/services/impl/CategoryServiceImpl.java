@@ -3,6 +3,7 @@ package com.marta.dscatalog.services.impl;
 import com.marta.dscatalog.entities.Category;
 import com.marta.dscatalog.repositories.CategoryRepository;
 import com.marta.dscatalog.services.CategoryService;
+import com.marta.dscatalog.services.exceptions.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -27,7 +28,7 @@ public class CategoryServiceImpl  implements CategoryService {
     public Category findById(Long id) {
         Optional<Category> categoryOptional = categoryRepository.findById(id);
 
-        Category categoryEntity = categoryOptional.get();
+        Category categoryEntity = categoryOptional.orElseThrow(() -> new EntityNotFoundException("Entity not found"));
         return categoryEntity;
     }
 
